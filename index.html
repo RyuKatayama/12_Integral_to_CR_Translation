@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>インテグラル理論 → 批判的実在論への圏論的翻訳</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Yu Gothic', 'Meiryo', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #d32f2f 50%, #212121 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .presentation-container {
+            width: 1400px;
+            height: 788px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100%;
+            padding: 50px 60px;
+            display: none;
+            position: relative;
+            overflow-y: auto;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        .slide-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 4px solid #d32f2f;
+            padding-bottom: 15px;
+        }
+
+        .slide-header h1 {
+            font-size: 2em;
+            color: #1a202c;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #667eea, #d32f2f);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .slide-header .subtitle {
+            font-size: 1.2em;
+            color: #4a5568;
+            font-weight: 500;
+        }
+
+        .content-section {
+            margin: 25px 0;
+        }
+
+        .section-title {
+            font-size: 1.4em;
+            color: #d32f2f;
+            font-weight: bold;
+            margin-bottom: 15px;
+            padding-left: 15px;
+            border-left: 5px solid #d32f2f;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.7em;
+        }
+
+        th {
+            background: linear-gradient(135deg, #d32f2f, #c62828);
+            color: white;
+            padding: 10px;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        td {
+            padding: 10px;
+            border: 2px solid #e2e8f0;
+            background: #f7fafc;
+        }
+
+        tr:nth-child(even) td {
+            background: #edf2f7;
+        }
+
+        .process-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 25px 0;
+            gap: 15px;
+        }
+
+        .process-box {
+            background: linear-gradient(135deg, #f7fafc, #edf2f7);
+            border: 3px solid #d32f2f;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            min-width: 200px;
+            flex: 1;
+        }
+
+        .process-box .title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .process-box .desc {
+            font-size: 0.9em;
+            color: #4a5568;
+            line-height: 1.5;
+        }
+
+        .arrow {
+            font-size: 2em;
+            color: #d32f2f;
+            font-weight: bold;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #fff5e6 0%, #ffe6cc 100%);
+            border-left: 6px solid #ff9800;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .key-concept-box {
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            border: 3px solid #d32f2f;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .preservation-box {
+            background: linear-gradient(135deg, #d4edda 0%, #a3d9a5 100%);
+            border: 3px solid #28a745;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .transformation-box {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border: 3px solid #2196f3;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .integral-box {
+            background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
+            border: 3px solid #8b5cf6;
+            border-radius: 12px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .cr-box {
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            border: 3px solid #d32f2f;
+            border-radius: 12px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .domain-box {
+            background: white;
+            border: 3px solid #d32f2f;
+            border-radius: 10px;
+            padding: 12px;
+            margin: 12px 0;
+            font-size: 0.8em;
+        }
+
+        .domain-title {
+            font-size: 1.05em;
+            font-weight: bold;
+            color: #c62828;
+            margin-bottom: 8px;
+        }
+
+        .testimony {
+            background: linear-gradient(135deg, #fafafa 0%, #eeeeee 100%);
+            border-left: 4px solid #d32f2f;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-style: italic;
+        }
+
+        .critique-box {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border: 3px solid #ff6f00;
+            border-radius: 12px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px 25px;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            padding: 12px 30px;
+            background: #d32f2f;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: #c62828;
+            transform: translateY(-2px);
+        }
+
+        .nav-btn:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+        }
+
+        .slide-number {
+            position: absolute;
+            bottom: 20px;
+            right: 30px;
+            color: #a0aec0;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        ul li {
+            padding-left: 25px;
+            position: relative;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        ul li:before {
+            content: "▶";
+            position: absolute;
+            left: 0;
+            color: #d32f2f;
+            font-size: 0.8em;
+        }
+
+        strong {
+            color: #2d3748;
+        }
+
+        .formula {
+            font-family: 'Courier New', monospace;
+            background: #ffebee;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
+            font-size: 1.1em;
+            border: 2px solid #d32f2f;
+        }
+
+        .structure-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 15px 0;
+        }
+
+        .structure-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 0.75em;
+        }
+
+        .structure-card h5 {
+            color: #c62828;
+            margin-bottom: 6px;
+            font-size: 1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: タイトル -->
+        <div class="slide active">
+            <div class="slide-header">
+                <h1>インテグラル理論 → 批判的実在論</h1>
+                <div class="subtitle">圏論的翻訳メカニズムの実例</div>
+            </div>
+
+            <div class="key-concept-box">
+                <h3 style="color: #c62828; margin-bottom: 15px; font-size: 1.3em;">翻訳の全体像</h3>
+                <div class="formula">
+                    翻訳 = π_CR ∘ 変換_{全象限→(We∪Its)} ∘ embed_Integral
+                </div>
+                <p style="margin-top: 15px; font-size: 1.1em; color: #2d3748; line-height: 1.8;">
+                    包括的な統合理論を、<br>
+                    社会批判の変革理論へと<br>
+                    <strong style="color: #d32f2f;">次元圧縮しながら変換</strong>する
+                </p>
+            </div>
+
+            <div class="process-flow">
+                <div class="process-box" style="background: linear-gradient(135deg, #f3e8ff, #e9d5ff); border-color: #8b5cf6;">
+                    <div class="title" style="color: #6b21a8;">ステップ1</div>
+                    <div class="desc">埋め込み<br>Embedding</div>
+                </div>
+                <div class="arrow">→</div>
+                <div class="process-box" style="background: linear-gradient(135deg, #ffebee, #ffcdd2); border-color: #d32f2f;">
+                    <div class="title" style="color: #c62828;">ステップ2</div>
+                    <div class="desc">象限変換<br>Transformation</div>
+                </div>
+                <div class="arrow">→</div>
+                <div class="process-box" style="background: linear-gradient(135deg, #fce4ec, #f8bbd0); border-color: #d32f2f;">
+                    <div class="title" style="color: #b71c1c;">ステップ3</div>
+                    <div class="desc">射影<br>Projection</div>
+                </div>
+            </div>
+
+            <div class="integral-box">
+                <h3 style="color: #6b21a8; margin-bottom: 10px;">インテグラル理論の視点</h3>
+                <p style="line-height: 1.7;">
+                    <strong>全象限×5要素構造:</strong> ベトナム人労働者の孤独（I象限）、健康被害（It象限）、文化的発達段階の多様性（We象限）、入管制度の構造的問題（Its象限）を統合的に理解する。
+                </p>
+            </div>
+
+            <div class="cr-box">
+                <h3 style="color: #c62828; margin-bottom: 10px;">批判的実在論の視点</h3>
+                <p style="line-height: 1.7;">
+                    <strong>深層構造の批判:</strong> 技能実習制度という<strong>搾取構造</strong>、国家・資本・ブローカーの共犯関係、労働者階級の分断、イデオロギーによる抑圧の正当化。
+                </p>
+            </div>
+
+            <div class="highlight-box">
+                <strong style="font-size: 1.2em;">本スライドの構成：</strong><br>
+                スライド2: ステップ1 - インテグラル理論の全象限理解<br>
+                スライド3: ステップ2 - 全象限から(We∪Its)象限への変換<br>
+                スライド4: Real Domain - 深層の搾取構造<br>
+                スライド5: Actual Domain - 変革実践<br>
+                スライド6: Empirical Domain - 抑圧と解放の経験<br>
+                スライド7: 完全な翻訳例と批判的対話
+            </div>
+
+            <div class="slide-number">1/7</div>
+        </div>
+
+        <!-- Slide 2: ステップ1 埋め込み -->
+        <div class="slide">
+            <div class="slide-header">
+                <h1>ステップ1: 埋め込み (Embedding)</h1>
+                <div class="subtitle">embed_Integral: インテグラル理論 → M⁶⁵|全象限</div>
+            </div>
+
+            <div class="content-section">
+                <div class="section-title">インテグラル理論の統合的理解（簡約版）</div>
+                
+                <div class="integral-box">
+                    <h4 style="color: #6b21a8; margin-bottom: 8px;">4象限での理解</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li><strong>I象限（個人内面）:</strong> ベトナム人労働者の孤独・屈辱・希望、川口住民の恐怖・葛藤、店主の意識発達</li>
+                        <li><strong>It象限（個人外面）:</strong> 長時間労働による健康被害、劣悪な住環境、労働力データ</li>
+                        <li><strong>We象限（集合内面）:</strong> 文化的発達段階の多様性（排外主義→伝統重視→人権重視→多文化共生）</li>
+                        <li><strong>Its象限（集合外面）:</strong> 技能実習制度の構造的問題、入管法、労働市場構造</li>
+                    </ul>
+                </div>
+
+                <div class="integral-box">
+                    <h4 style="color: #6b21a8; margin-bottom: 8px;">5要素構造</h4>
+                    <ul style="font-size: 0.85em;">
+                        <li><strong>Levels:</strong> 発達段階（前慣習的→慣習的→後慣習的→統合的）</li>
+                        <li><strong>Lines:</strong> 認知・感情・道徳・文化ラインの不均等発達</li>
+                        <li><strong>States:</strong> 恐怖・共感・対立・統合の意識状態</li>
+                        <li><strong>Types:</strong> 保守型・革新型・実利型・理想型</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="key-concept-box">
+                <h3 style="color: #c62828; margin-bottom: 10px;">インテグラル理論の包括性</h3>
+                <p style="line-height: 1.7;">
+                    インテグラル理論は、外国人受け入れ問題を<strong>全象限・5要素構造</strong>で統合的に理解する。<br>
+                    個人の内的経験（I象限）から社会構造（Its象限）まで、すべてを包含する。
+                </p>
+            </div>
+
+            <div class="slide-number">2/7</div>
+        </div>
+
+        <!-- Slide 3: ステップ2 象限変換 -->
+        <div class="slide">
+            <div class="slide-header">
+                <h1>ステップ2: 象限変換 (Transformation)</h1>
+                <div class="subtitle">変換: M⁶⁵|全象限 → M⁶⁵|(We∪Its)</div>
+            </div>
+
+            <div class="content-section">
+                <div class="section-title">統合的理解から構造批判へ</div>
+                <table style="font-size: 0.75em;">
+                    <thead>
+                        <tr>
+                            <th style="width: 15%;">要素</th>
+                            <th style="width: 35%;">全象限での表現</th>
+                            <th style="width: 35%;">(We∪Its)象限への変換</th>
+                            <th style="width: 15%;">変換の性質</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Observer</strong></td>
+                            <td>統合的自己(全象限で発達)</td>
+                            <td>社会変革のAgency</td>
+                            <td style="color: #d32f2f; font-weight: bold;">統合主体→変革主体</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Focus</strong></td>
+                            <td>統合的課題(4象限×5要素)</td>
+                            <td>権力構造と社会的排除</td>
+                            <td style="color: #d32f2f; font-weight: bold;">多次元課題→構造批判</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Method</strong></td>
+                            <td>統合的実践</td>
+                            <td>批判的構造分析</td>
+                            <td style="color: #d32f2f; font-weight: bold;">統合実践→批判分析</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Construction</strong></td>
+                            <td>統合的理解</td>
+                            <td>対抗的社会実践</td>
+                            <td style="color: #d32f2f; font-weight: bold;">包括理解→変革実践</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Target</strong></td>
+                            <td>統合的意識</td>
+                            <td>構造的解放</td>
+                            <td style="color: #d32f2f; font-weight: bold;">意識発達→社会正義</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="transformation-box">
+                <h3 style="color: #1565c0; margin-bottom: 10px;">統合的洞察から構造批判への変換例</h3>
+                <table style="font-size: 0.8em; margin-top: 10px;">
+                    <thead>
+                        <tr>
+                            <th style="width: 50%;">インテグラル理論での統合的理解</th>
+                            <th style="width: 50%;">批判的実在論での構造批判</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>I象限: ベトナム人労働者の孤独・屈辱</td>
+                            <td>技能実習制度による<strong>構造的暴力</strong>の結果</td>
+                        </tr>
+                        <tr>
+                            <td>It象限: 外国人労働者の健康被害</td>
+                            <td>劣悪な労働環境の<strong>構造的強制</strong></td>
+                        </tr>
+                        <tr>
+                            <td>We象限: 文化的発達段階の多様性</td>
+                            <td>排外主義<strong>イデオロギー</strong>の再生産構造</td>
+                        </tr>
+                        <tr>
+                            <td>Its象限: 入管制度の構造的問題</td>
+                            <td>「使い捨て労働力」として<strong>搾取する構造</strong></td>
+                        </tr>
+                        <tr>
+                            <td>「川口住民は慣習的段階だから不安」</td>
+                            <td>急激な外国人流入への支援不足という<strong>政策の構造的失敗</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="key-concept-box">
+                <h3 style="color: #c62828; margin-bottom: 10px;">重要な変換</h3>
+                <p style="line-height: 1.7; font-size: 0.95em;">
+                    個人の意識や感情（I象限）は、社会構造（We∪Its象限）によって<strong>因果的に生み出される</strong>と見る。<br>
+                    「発達段階の多様性」は「イデオロギーと権力構造」として再解釈される。
+                </p>
+            </div>
+
+            <div class="slide-number">3/7</div>
+        </div>
+
+        <!-- Slide 4: Real Domain -->
+        <div class="slide">
+            <div class="slide-header">
+                <h1>Real Domain（実在的ドメイン）</h1>
+                <div class="subtitle">目に見えない深層の搾取構造</div>
+            </div>
+
+            <div class="content-section">
+                <div class="section-title">5つの深層構造</div>
+                
+                <div class="domain-box">
+                    <div class="domain-title">1. 「使い捨て労働力」としての構造的位置づけ</div>
+                    <strong>技能実習制度の構造的搾取:</strong><br>
+                    ・転職の自由なし → 雇用者への絶対的従属<br>
+                    ・送り出し機関への多額の借金 → 債務奴隷状態<br>
+                    ・人権侵害（長時間労働、賃金未払い、パスポート没収）<br>
+                    ・告発すれば強制帰国 → 声を上げられない構造<br>
+                    <strong style="color: #d32f2f;">→ 制度そのものに搾取が組み込まれている</strong>
+                </div>
+
+                <div class="domain-box">
+                    <div class="domain-title">2. 階層的分断の構造</div>
+                    ・外国人労働者は「3K労働」に集中配置<br>
+                    ・日本人労働者と外国人労働者の分断<br>
+                    ・「外国人が仕事を奪う」という<strong>虚偽意識</strong>の生産<br>
+                    ・真の問題（資本による労働搾取）から目をそらす<strong>イデオロギー装置</strong>
+                </div>
+
+                <div class="domain-box">
+                    <div class="domain-title">3. 空間的不平等の再生産</div>
+                    ・都市部: 「便利な労働力」として外国人を活用<br>
+                    ・地方: 「人手不足の穴埋め」として外国人を配置<br>
+                    ・支援は不十分、<strong>コストは地域負担、利益は企業独占</strong><br>
+                    ・川口市の問題 = 住民の不寛容ではなく<strong>政策の構造的失敗</strong>
+                </div>
+
+                <div class="domain-box">
+                    <div class="domain-title">4. イデオロギーによる抑圧の正当化</div>
+                    ・<strong>新自由主義:</strong> 「経済成長に必要」→ 搾取を正当化<br>
+                    ・<strong>多文化主義:</strong> 「多様性は豊かさ」→ 構造的搾取を不可視化<br>
+                    ・<strong>排外主義:</strong> 「伝統を守れ」→ 労働者階級の分断<br>
+                    <strong style="color: #d32f2f;">→ すべてが根本的な権力構造を隠蔽</strong>
+                </div>
+
+                <div class="domain-box">
+                    <div class="domain-title">5. 国家・資本・ブローカーの三位一体構造</div>
+                    ・<strong>国家:</strong> 搾取を制度的に保障（入管法、技能実習法）<br>
+                    ・<strong>資本:</strong> 低賃金労働力を搾取し、利益最大化<br>
+                    ・<strong>ブローカー:</strong> 送り出し国で高額手数料を徴収（借金漬け）<br>
+                    <strong style="color: #d32f2f;">→ 三者が外国人労働者の脆弱性を構造的に生産・維持</strong>
+                </div>
+            </div>
+
+            <div class="slide-number">4/7</div>
+        </div>
+
+        <!-- Slide 5: Actual Domain -->
+        <div class="slide">
+            <div class="slide-header">
+                <h1>Actual Domain（実際的ドメイン）</h1>
+                <div class="subtitle">実際に起きている変革実践</div>
+            </div>
+
+            <div class="content-section">
+                <div class="section-title">5つの対抗的実践</div>
+                
+                <div class="structure-grid">
+                    <div class="structure-card">
+                        <h5>1. 外国人労働者自身の抵抗</h5>
+                        <strong>Agency:</strong> ベトナム人技能実習生の労働組合<br>
+                        <strong>実践:</strong> 未払い賃金請求訴訟、労基署への告発、SNSでの実態告発、同国人ネットワーク形成<br>
+                        <strong style="color: #d32f2f;">→ 構造的搾取への集合的抵抗</strong>
+                    </div>
+
+                    <div class="structure-card">
+                        <h5>2. 支援団体・労働組合の運動</h5>
+                        <strong>Agency:</strong> 移住労働者と連帯する全国ネットワーク<br>
+                        <strong>要求:</strong> 技能実習制度廃止、転職の自由、ブローカー規制、労働組合権保障、永住権拡大<br>
+                        <strong style="color: #d32f2f;">→ 資本による労働搾取構造への根本批判</strong>
+                    </div>
+
+                    <div class="structure-card">
+                        <h5>3. 地域住民運動</h5>
+                        <strong>Agency:</strong> 川口市の一部住民とNGO<br>
+                        <strong>実践:</strong> 対話集会、生活ルール多言語化、行政への財政支援要求、労働条件改善支援<br>
+                        <strong style="color: #d32f2f;">→ 文化的寛容を超えて構造的不正義への共同対抗へ</strong>
+                    </div>
+
+                    <div class="structure-card">
+                        <h5>4. 批判的知識人の構造暴露</h5>
+                        <strong>Agency:</strong> 批判的移民研究者・ジャーナリスト<br>
+                        <strong>実践:</strong> 実態調査、借金額調査、ブローカー利益構造解明、建前と実態の乖離告発<br>
+                        <strong style="color: #d32f2f;">→ 「制度そのものの構造的問題」を社会的に認識させる</strong>
+                    </div>
+
+                    <div class="structure-card">
+                        <h5>5. 労働組合の階級的連帯</h5>
+                        <strong>Agency:</strong> 日本の労働組合の一部<br>
+                        <strong>実践:</strong> 外国人組合加入促進、多言語相談窓口、分断認識の共有、同一労働同一賃金要求<br>
+                        <strong style="color: #d32f2f;">→ 労働者階級の国際的連帯、分断統治への抵抗</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cr-box">
+                <h3 style="color: #c62828; margin-bottom: 10px;">変革後の社会構造</h3>
+                <ul style="font-size: 0.85em;">
+                    <li>搾取構造の解体: 技能実習制度廃止、転職自由、債務奴隷状態禁止、同一労働同一賃金</li>
+                    <li>階級的連帯: 日本人と外国人労働者の連帯、虚偽意識の克服</li>
+                    <li>空間的正義: 外国人集住地域への十分な財政支援</li>
+                    <li>イデオロギーの克服: 市場の論理・多文化主義・排外主義を超えて構造的不正義への明確な認識</li>
+                </ul>
+            </div>
+
+            <div class="slide-number">5/7</div>
+        </div>
+
+        <!-- Slide 6: Empirical Domain -->
+        <div class="slide">
+            <div class="slide-header">
+                <h1>Empirical Domain（経験的ドメイン）</h1>
+                <div class="subtitle">観察可能な抑圧と解放の経験</div>
+            </div>
+
+            <div class="content-section">
+                <div class="section-title">抑圧の経験</div>
+                
+                <div class="testimony">
+                    「私はベトナムから日本に来た。送り出し機関に100万円払った。家族が借金をした。工場で朝6時から夜10時まで。残業代は払われない。抗議したら『帰れ』と言われた。私は帰れない。借金がある。私は<strong>奴隷</strong>だ。でも、これは私だけの問題ではない。何千人も同じ状況だ。これは<strong>制度の問題</strong>だ。」<br>
+                    <strong>—技能実習生の証言</strong>
+                </div>
+
+                <div class="testimony">
+                    「私は川口で40年住んでいる。クルド人が急増。夜騒がしい、ゴミが散乱。ある日、クルド人の若者と話した。彼は言った『狭い部屋に10人で住んでいる。家の中にいられない』。私は気づいた。これは彼らの問題ではない。<strong>劣悪な環境に置いている構造</strong>の問題だ。」<br>
+                    <strong>—川口市住民の証言</strong>
+                </div>
+
+                <div class="testimony">
+                    「串カツ店を経営。ベトナム人のグエンさんを雇っている。ある日、彼女が泣いていた。『寮の家賃が高すぎて家族に送金できない』。調べたら、会社提供の寮は狭い部屋に法外な家賃。これは<strong>搾取</strong>だ。私は助けたいが、一人の店主に何ができる？ <strong>制度を変えなければ</strong>。」<br>
+                    <strong>—雇用者の証言</strong>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <div class="section-title">解放の経験</div>
+                
+                <div class="testimony">
+                    「ベトナム人技能実習生は労働組合を作った。最初は怖かった。でも、一緒に闘うことで<strong>力</strong>を感じた。未払い賃金を請求し、勝った。私たちは<strong>被害者ではなく、闘う主体</strong>になった。」<br>
+                    <strong>—労働組合メンバーの証言</strong>
+                </div>
+
+                <div class="testimony">
+                    「川口で、日本人住民とクルド人住民の対話集会。最初は対立的。しかし、『誰が得をしているのか？』と問うた。気づいた。<strong>私たち（日本人もクルド人も）は劣悪な環境・低賃金という構造の被害者</strong>だ。本当の敵は、この構造を作っている者たちだ。私たちは連帯し始めた。」<br>
+                    <strong>—地域運動メンバーの証言</strong>
+                </div>
+
+                <div class="testimony">
+                    「労働組合で、日本人とベトナム人が一緒に闘争。国籍は違うが、私たちは<strong>同じ労働者</strong>だ。資本は私たちを分断しようとする。しかし、私たちは連帯する。これが<strong>階級闘争</strong>だ。」<br>
+                    <strong>—労働組合員の証言</strong>
+                </div>
+            </div>
+
+            <div class="slide-number">6/7</div>
+        </div>
+
+        <!-- Slide 7: 完全な翻訳例と批判的対話 -->
+        <div class="slide">
+            <div class="slide-header">
+                <h1>完全な翻訳例と批判的対話</h1>
+                <div class="subtitle">翻訳 = π_CR ∘ 変換_{全象限→(We∪Its)} ∘ embed_Integral</div>
+            </div>
+
+            <div class="content-section">
+                <div class="section-title">翻訳における本質的変化</div>
+                
+                <table style="font-size: 0.8em;">
+                    <thead>
+                        <tr>
+                            <th style="width: 25%;">側面</th>
+                            <th style="width: 37.5%;">インテグラル理論</th>
+                            <th style="width: 37.5%;">批判的実在論</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>焦点</strong></td>
+                            <td>全象限(I∪It∪We∪Its)×5要素</td>
+                            <td>(We∪Its)象限—社会構造と権力</td>
+                        </tr>
+                        <tr>
+                            <td><strong>主体</strong></td>
+                            <td>統合的自己(全象限で発達)</td>
+                            <td>社会変革のAgency</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ベトナム人の孤独</strong></td>
+                            <td>I象限の感情、発達段階の移行</td>
+                            <td>技能実習制度による構造的暴力の結果</td>
+                        </tr>
+                        <tr>
+                            <td><strong>川口住民の不安</strong></td>
+                            <td>慣習的段階、感情的ライン</td>
+                            <td>政策失敗による構造的問題の帰結</td>
+                        </tr>
+                        <tr>
+                            <td><strong>発達段階の多様性</strong></td>
+                            <td>個人・文化の発達レベルの違い</td>
+                            <td>イデオロギーと権力構造</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="critique-box">
+                <h3 style="color: #e65100; margin-bottom: 10px;">批判的実在論からインテグラル理論への問い</h3>
+                <p style="line-height: 1.6; font-size: 0.85em;">
+                    「インテグラル理論は、<strong>構造的権力関係を個人化</strong>し、<strong>真の問題を不可視化</strong>する危険性がないか？<br><br>
+                    『川口市住民は慣習的段階』と言うとき、<strong>政策の構造的失敗</strong>という真の原因が隠蔽されないか？<br><br>
+                    『ベトナム人の孤独』をI象限として記述するとき、<strong>技能実習制度という搾取構造</strong>が副次的要因になり、<strong>個人の心理問題</strong>にすり替えられないか？<br><br>
+                    包括性ゆえに、<strong>批判の矛先を鈍らせ、構造変革への緊急性を薄める</strong>危険性がある。<br>
+                    今必要なのは、『統合的理解』ではなく、<strong>構造的不正義を明確に告発し、変革する実践</strong>ではないか？」
+                </p>
+            </div>
+
+            <div class="key-concept-box" style="margin-top: 15px;">
+                <h3 style="color: #c62828; margin-bottom: 10px;">メタ的統合と相補性</h3>
+                <p style="line-height: 1.6; font-size: 0.9em;">
+                    M⁶⁵理論の視点からは、両者は対立ではなく<strong>補完的</strong>：<br>
+                    ・<strong>批判的実在論:</strong> なぜこの構造が存在するのか、どう変革するか（We∪Its象限）<br>
+                    ・<strong>インテグラル理論:</strong> 人々がこの構造をどう経験し、どう意識発達するか（全象限）<br><br>
+                    <strong>ある統合的活動家の実践:</strong><br>
+                    「批判的実在論の構造分析で<strong>何が真の問題か</strong>を理解した。技能実習制度という搾取構造、国家・資本・ブローカーの共犯関係。<br>
+                    しかし、運動の現場では、インテグラル理論の洞察が役立つ。保守的な住民に『遅れている』と言っても反発されるだけ。その人の<strong>発達段階を理解</strong>し、響く言葉を探す。<br>
+                    批判的実在論は私の<strong>分析の道具</strong>、インテグラル理論は私の<strong>実践の知恵</strong>。<br>
+                    両方を使うことで、<strong>構造を変革しながら、人々の意識も変容させる</strong>。」
+                </p>
+            </div>
+
+            <div class="slide-number">7/7</div>
+        </div>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prevBtn">← 前へ</button>
+        <button class="nav-btn" id="nextBtn">次へ →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === totalSlides - 1;
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            }
+        });
+
+        showSlide(0);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' && currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            } else if (e.key === 'ArrowLeft' && currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        });
+    </script>
+</body>
+</html>
